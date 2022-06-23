@@ -12,3 +12,6 @@ ts-node is slow and you won't be using it in production
     "dev2": "nodemon --exec ts-node src/index.ts"
 so you watch for changes using npm run watch and then you run the changes using npm run dev
 as alternative you can run npm run dev2
+
+
+npm i -s @mikro-orm/cli @mikro-orm/core @mikro-orm/migrations @mikro-orm/postgresql pg // I only did this npm i -s @mikro-orm/core @mikro-orm/postgresql
