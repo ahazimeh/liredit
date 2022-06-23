@@ -1,0 +1,14 @@
+npm i -D @types/node typescript
+
+most people would do this:
+    npm i -D ts-node
+    "start": "ts-node src/index.ts"
+npx tsconfig.json //made by Ben, for some reasons it didn't work on windows
+
+ts-node is slow and you won't be using it in production
+    "watch": "tsc -w",
+    "dev": "nodemon dist/index.js",
+    "start": "node dist/index.js",
+    "dev2": "nodemon --exec ts-node src/index.ts"
+so you watch for changes using npm run watch and then you run the changes using npm run dev
+as alternative you can run npm run dev2
