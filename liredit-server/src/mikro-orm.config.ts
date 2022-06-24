@@ -7,6 +7,7 @@ export default {
   migrations: {
     path: path.join(__dirname, "./migrations"),
   },
+  allowGlobalContext: true,
   entities: [Post], // no need for `entitiesTs` this way
   dbName: "lireddit1",
   type: "postgresql", // one of `mongo` | `mysql` | `mariadb` | `postgresql` | `sqlite`

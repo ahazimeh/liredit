@@ -15,3 +15,10 @@ as alternative you can run npm run dev2
 
 
 npm i -s @mikro-orm/cli @mikro-orm/core @mikro-orm/migrations @mikro-orm/postgresql pg // I only did this npm i -s @mikro-orm/core @mikro-orm/postgresql
+
+npm i express apollo-server-express graphql type-graphql
+npm i -D @types/express
+
+app.get("/", (_, res) => { //_ used to ignore a variable
+    res.send("hello");
+  });
