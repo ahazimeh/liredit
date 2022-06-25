@@ -22,3 +22,7 @@ npm i -D @types/express
 app.get("/", (_, res) => { //_ used to ignore a variable
     res.send("hello");
   });
+
+
+https://security.stackexchange.com/questions/193351/in-2018-what-is-the-recommended-hash-to-store-passwords-bcrypt-scrypt-argon2
+so use argon2 rather than bcrypt
