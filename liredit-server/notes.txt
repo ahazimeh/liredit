@@ -45,3 +45,19 @@ app.use(
       credentials: true,
     })
   );
+
+
+  //logout
+  @Mutation(() => Boolean)
+  logout(@Ctx() { req }: MyContext) {
+    return new Promise((res) =>
+      req.session.destroy((err) => {
+        if (err) {
+          res(false);
+          return;
+        }
+        res.clearCookie("qid");
+        res(true);
+      })
+    );
+  }
