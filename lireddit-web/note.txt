@@ -8,3 +8,40 @@ const client = createClient({
       credentials: "include", //to provide cookie with each request
     },
   });
+
+
+
+//using query build, replaced // lines with the other lines
+// const user = em.create(User, {
+    //   username: options.username,
+    //   password: hashedPassword,
+    // });
+    let user;
+    try {
+      const result = await (em as EntityManager)
+        .createQueryBuilder(User)
+        .getKnexQuery()
+        .insert({
+          username: options.username,
+          password: hashedPassword,
+          created_at: new Date(),
+          updated_at: new Date(),
+        })
+        .returning("*");
+        user = result[0]
+      // await em.persistAndFlush(user);
+    }
+
+//this is how he converted the object
+[{field:'username', message: 'something wrong'}] -> [{username: 'something wrong'}]
+setErrors(toErrorMap(response.data.register.errors));
+import { FieldError } from "../generated/graphql";
+export const toErrorMap = (errors: FieldError[]) => {
+  const errorMap: Record<string, string> = {};
+  errors.forEach(({ field, message }) => {
+    errorMap[field] = message;
+  });
+  return errorMap;
+};
+/////////
+
