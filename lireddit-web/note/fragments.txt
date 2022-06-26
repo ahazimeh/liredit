@@ -1,3 +1,10 @@
+inside RegularUser.graphql
+fragment RegularUser on User {
+  id
+  username
+}
+
+
 mutation Login($options: UsernamePasswordInput!) {
   login(options: $options) {
     user {
