@@ -46,3 +46,12 @@ export const toErrorMap = (errors: FieldError[]) => {
 /////////
 
 cache:
+
+
+// cntr shift p organize imports // to remove all unused imports 
+
+//to not load data when we are on the server
+export const isServer = () => typeof window === "undefined";
+useMeQuery({
+  pause: isServer(),
+});
