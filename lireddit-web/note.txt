@@ -1,0 +1,10 @@
+ctr shift p: user snippet -> typescriptreact
+https://gist.github.com/benawad/1e9dd01994f78489306fbfd6f7b01cd3#file-snippets-typescriptreact-json
+rh snippet
+
+const client = createClient({
+    url: "http://localhost:4000/graphql",
+    fetchOptions: {
+      credentials: "include", //to provide cookie with each request
+    },
+  });

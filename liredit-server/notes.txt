@@ -26,3 +26,22 @@ app.get("/", (_, res) => { //_ used to ignore a variable
 
 https://security.stackexchange.com/questions/193351/in-2018-what-is-the-recommended-hash-to-store-passwords-bcrypt-scrypt-argon2
 so use argon2 rather than bcrypt
+
+
+
+cors: 
+apolloServer.applyMiddleware({
+    app,
+    // cors: {
+    //   origin: "http://localhost:3000",
+    //   credentials: true,
+    // },
+    cors: false,
+  });
+// you can set it as false and use cors package
+app.use(
+    cors({
+      origin: "http://localhost:3000",
+      credentials: true,
+    })
+  );
