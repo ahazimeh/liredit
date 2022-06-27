@@ -21,6 +21,7 @@ import Redis from "ioredis";
 import { MyContext } from "./types";
 // import { sendEmail } from "./utils/sendMail";
 // import { User } from "./entities/User";
+import { DataSource } from "typeorm";
 declare module "express-session" {
   export interface SessionData {
     userId: number;
@@ -29,6 +30,26 @@ declare module "express-session" {
 }
 const main = async () => {
   // sendEmail("hazimeh95@gmail.com", "hello there");
+  const AppDataSource = new DataSource({
+    type: "postgres", //
+    host: "localhost",
+    port: 5432,
+    username: "lireddit2", ///
+    password: "lireddit2", ///
+    database: "lireddit2", //
+    entities: [],
+    synchronize: true,
+    logging: true,
+  });
+
+  // to initialize initial connection with the database, register all entities
+  // and "synchronize" database schema, call "initialize()" method of a newly created database
+  // once in your application bootstrap
+  AppDataSource.initialize()
+    .then(() => {
+      // here you can start to work with your database
+    })
+    .catch((error) => console.log(error));
   const orm = await MikroORM.init(microConfig);
   // await orm.em.nativeDelete(User, {});
   await orm.getMigrator().up();

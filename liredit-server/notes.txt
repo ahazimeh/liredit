@@ -67,3 +67,9 @@ app.use(
   npm i -D @types/uuid
 
   // fish shell, be using it for autocompletion stuff in the terminal
+
+  got problems with ts autocompletion:
+  ctr shift p: restart ts server, or reload window
+
+  postgress:
+  CREATE DATABASE lirredit2 WITH OWNER lireddit2;
