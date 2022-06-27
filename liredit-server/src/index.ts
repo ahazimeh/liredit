@@ -18,6 +18,8 @@ const {
 // redis@v4
 import { createClient } from "redis";
 import { MyContext } from "./types";
+// import { sendEmail } from "./utils/sendMail";
+// import { User } from "./entities/User";
 declare module "express-session" {
   export interface SessionData {
     userId: number;
@@ -25,7 +27,9 @@ declare module "express-session" {
   }
 }
 const main = async () => {
+  // sendEmail("hazimeh95@gmail.com", "hello there");
   const orm = await MikroORM.init(microConfig);
+  // await orm.em.nativeDelete(User, {});
   await orm.getMigrator().up();
   const app = express();
 

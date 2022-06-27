@@ -9,7 +9,7 @@ interface NavBarProps {}
 const NavBar: React.FC<NavBarProps> = ({}) => {
   const [{ fetching: logoutFetching }, logout] = useLogoutMutation();
   const [{ data, fetching }] = useMeQuery({
-    pause: isServer(),
+    // pause: isServer(),
   });
   let body = <div></div>;
   // data loading
@@ -24,7 +24,7 @@ const NavBar: React.FC<NavBarProps> = ({}) => {
         <NextLink href="/login">
           <Link mr={2}>login</Link>
         </NextLink>
-        <NextLink href="/login">
+        <NextLink href="/register">
           <Link>register</Link>
         </NextLink>
       </>

@@ -20,6 +20,10 @@ export class User {
   @Property({ type: "text", unique: true }) //removing this means it is just a field in the class and not a column
   username!: string;
 
+  @Field()
+  @Property({ type: "text", unique: true }) //removing this means it is just a field in the class and not a column
+  email!: string;
+
   @Property({ type: "text" }) //removing this means it is just a field in the class and not a column
   password!: string;
 }
