@@ -55,3 +55,12 @@ export const isServer = () => typeof window === "undefined";
 useMeQuery({
   pause: isServer(),
 });
+
+
+
+// hay bi next js, research about it 
+ChangePassword.getInitialProps = ({query}) => {
+    return {
+        token: query.token as string
+    }
+}

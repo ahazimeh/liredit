@@ -16,7 +16,8 @@ const {
   ApolloServerPluginLandingPageGraphQLPlayground,
 } = require("apollo-server-core");
 // redis@v4
-import { createClient } from "redis";
+// import { createClient } from "redis";
+import Redis from "ioredis";
 import { MyContext } from "./types";
 // import { sendEmail } from "./utils/sendMail";
 // import { User } from "./entities/User";
@@ -34,8 +35,10 @@ const main = async () => {
   const app = express();
 
   const RedisStore = connectRedis(session);
-  const redisClient = createClient({ legacyMode: true });
-  redisClient.connect().catch(console.error);
+
+  // const redis = createClient({ legacyMode: true }); //
+  // redis.connect().catch(console.error); //
+  const redis = new Redis();
 
   app.use(
     cors({
@@ -47,7 +50,7 @@ const main = async () => {
     session({
       name: COOKIE_NAME,
       store: new RedisStore({
-        client: redisClient,
+        client: redis,
         disableTouch: true,
       }),
       cookie: {
@@ -67,7 +70,7 @@ const main = async () => {
       resolvers: [HelloResolver, PostResolver, UserResolver],
       validate: false,
     }),
-    context: ({ req, res }): MyContext => ({ em: orm.em, req, res }),
+    context: ({ req, res }): MyContext => ({ em: orm.em, req, res, redis }),
     plugins: [
       ApolloServerPluginLandingPageGraphQLPlayground({
         // options
