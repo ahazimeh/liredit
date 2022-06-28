@@ -1,7 +1,7 @@
-// import "reflect-metadata"
-import { MikroORM } from "@mikro-orm/core";
+import "reflect-metadata";
+// import { MikroORM } from "@mikro-orm/core";
 import { COOKIE_NAME, __prod__ } from "./constants";
-import microConfig from "./mikro-orm.config";
+// import microConfig from "./mikro-orm.config";
 import express from "express";
 import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
@@ -22,6 +22,8 @@ import { MyContext } from "./types";
 // import { sendEmail } from "./utils/sendMail";
 // import { User } from "./entities/User";
 import { DataSource } from "typeorm";
+import { Post } from "./entities/Post";
+import { User } from "./entities/User";
 declare module "express-session" {
   export interface SessionData {
     userId: number;
@@ -35,9 +37,9 @@ const main = async () => {
     host: "localhost",
     port: 5432,
     username: "lireddit2", ///
-    password: "lireddit2", ///
-    database: "lireddit2", //
-    entities: [],
+    password: "admin", ///
+    database: "lirredit2", //
+    entities: [Post, User],
     synchronize: true,
     logging: true,
   });
@@ -50,9 +52,9 @@ const main = async () => {
       // here you can start to work with your database
     })
     .catch((error) => console.log(error));
-  const orm = await MikroORM.init(microConfig);
+  // const orm = await MikroORM.init(microConfig);
   // await orm.em.nativeDelete(User, {});
-  await orm.getMigrator().up();
+  // await orm.getMigrator().up();
   const app = express();
 
   const RedisStore = connectRedis(session);
@@ -91,7 +93,7 @@ const main = async () => {
       resolvers: [HelloResolver, PostResolver, UserResolver],
       validate: false,
     }),
-    context: ({ req, res }): MyContext => ({ em: orm.em, req, res, redis }),
+    context: ({ req, res }): MyContext => ({ req, res, redis }),
     plugins: [
       ApolloServerPluginLandingPageGraphQLPlayground({
         // options

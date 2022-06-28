@@ -1,6 +1,7 @@
 // import { Entity, PrimaryKey, Property } from "@mikro-orm/core";
 import { Field, ObjectType } from "type-graphql";
 import {
+  BaseEntity,
   Column,
   CreateDateColumn,
   Entity,
@@ -10,7 +11,7 @@ import {
 
 @ObjectType() //to be able to use it as return type
 @Entity() //corresponds to db table
-export class User {
+export class User extends BaseEntity {
   @Field() //to expose the field
   @PrimaryGeneratedColumn()
   id: number;
@@ -21,7 +22,7 @@ export class User {
 
   @Field(() => String)
   @UpdateDateColumn(/*{ type: "date", onUpdate: () => new Date() }*/)
-  updatedAt? = new Date();
+  updatedAt?: Date;
 
   @Field()
   @Column({ type: "text", unique: true }) //removing this means it is just a field in the class and not a column
