@@ -16,7 +16,6 @@ import { UsernamePasswordInput } from "../utils/UsernamePasswordInput";
 import { validateRegister } from "../utils/validateRegister";
 import { sendEmail } from "../utils/sendMail";
 import { v4 } from "uuid";
-import dataSource from "typeorm";
 
 @ObjectType()
 class FieldError {
@@ -129,7 +128,7 @@ export class UserResolver {
   @Mutation(() => UserResponse)
   async register(
     @Arg("options") options: UsernamePasswordInput,
-    @Ctx() { req }: MyContext
+    @Ctx() { req, DataSource }: MyContext
   ): Promise<UserResponse> {
     const errors = validateRegister(options);
     if (errors) return { errors };
@@ -140,8 +139,7 @@ export class UserResolver {
     // });
     let user;
     try {
-      const result = await dataSource
-        .createQueryBuilder()
+      const result = await DataSource.createQueryBuilder()
         .insert()
         .into(User)
         .values([
@@ -159,7 +157,7 @@ export class UserResolver {
 
       // user = result[0];
       // await em.persistAndFlush(user);
-      user = result.raw;
+      user = result.raw[0];
     } catch (err) {
       console.log("err", err);
       if (err.code === "23505") {

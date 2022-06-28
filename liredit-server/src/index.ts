@@ -93,7 +93,12 @@ const main = async () => {
       resolvers: [HelloResolver, PostResolver, UserResolver],
       validate: false,
     }),
-    context: ({ req, res }): MyContext => ({ req, res, redis }),
+    context: ({ req, res }): MyContext => ({
+      DataSource: AppDataSource,
+      req,
+      res,
+      redis,
+    }),
     plugins: [
       ApolloServerPluginLandingPageGraphQLPlayground({
         // options
