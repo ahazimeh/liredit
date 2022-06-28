@@ -5,9 +5,11 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
+import { Post } from "./Post";
 
 @ObjectType() //to be able to use it as return type
 @Entity() //corresponds to db table
@@ -15,14 +17,6 @@ export class User extends BaseEntity {
   @Field() //to expose the field
   @PrimaryGeneratedColumn()
   id: number;
-
-  @Field(() => String)
-  @CreateDateColumn({ type: "date" })
-  createdAt?: Date; // = new Date();
-
-  @Field(() => String)
-  @UpdateDateColumn(/*{ type: "date", onUpdate: () => new Date() }*/)
-  updatedAt?: Date;
 
   @Field()
   @Column({ type: "text", unique: true }) //removing this means it is just a field in the class and not a column
@@ -34,4 +28,15 @@ export class User extends BaseEntity {
 
   @Column({ type: "text" }) //removing this means it is just a field in the class and not a column
   password!: string;
+
+  @OneToMany(() => Post, (post) => post.creator)
+  posts: Post[];
+
+  @Field(() => String)
+  @CreateDateColumn({ type: "date" })
+  createdAt?: Date; // = new Date();
+
+  @Field(() => String)
+  @UpdateDateColumn(/*{ type: "date", onUpdate: () => new Date() }*/)
+  updatedAt?: Date;
 }
