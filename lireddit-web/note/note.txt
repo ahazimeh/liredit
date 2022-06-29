@@ -64,3 +64,8 @@ ChangePassword.getInitialProps = ({query}) => {
         token: query.token as string
     }
 }
+
+
+global error handling:
+github.com/formidableLabs/urql/issues/225
+// I added it to createUrqlClient.txt
