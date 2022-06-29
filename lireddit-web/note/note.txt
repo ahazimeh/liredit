@@ -59,6 +59,7 @@ useMeQuery({
 
 
 // hay bi next js, research about it 
+//ben mentioned inno if you don't use it nextjs will make the page static and optimize it so if you don't need it then remove it: 6:30:00
 ChangePassword.getInitialProps = ({query}) => {
     return {
         token: query.token as string

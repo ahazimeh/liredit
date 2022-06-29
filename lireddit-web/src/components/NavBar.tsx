@@ -3,6 +3,8 @@ import React from "react";
 import NextLink from "next/link";
 import { useLogoutMutation, useMeQuery } from "../generated/graphql";
 import { isServer } from "../util/isServer";
+import { createUrlqClient } from "../util/createUrqlClient";
+import { withUrqlClient } from "next-urql";
 
 interface NavBarProps {}
 
@@ -54,4 +56,4 @@ const NavBar: React.FC<NavBarProps> = ({}) => {
     </Flex>
   );
 };
-export default NavBar;
+export default withUrqlClient(createUrlqClient)(NavBar);
