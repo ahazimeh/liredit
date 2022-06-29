@@ -8,14 +8,21 @@ import Wrapper from "../components/Wrapper";
 import { toErrorMap } from "../util/toErrorMap";
 import login from "./login";
 import NextLink from "next/link";
-import { useCreatePostMutation } from "../generated/graphql";
+import { useCreatePostMutation, useMeQuery } from "../generated/graphql";
 import { useRouter } from "next/router";
 import { withUrqlClient } from "next-urql";
 import { createUrlqClient } from "../util/createUrqlClient";
 import { Layout } from "../components/Layout";
+import { useEffect } from "react";
 
 const CreatePost: React.FC<{}> = ({}) => {
+  const [{ data, fetching }] = useMeQuery();
   const router = useRouter();
+  useEffect(() => {
+    if (!fetching && !data?.me) {
+      router.replace("/login");
+    }
+  });
   const [, createPost] = useCreatePostMutation();
   return (
     <Layout variant="small">
@@ -24,10 +31,7 @@ const CreatePost: React.FC<{}> = ({}) => {
         onSubmit={async (values, { setErrors }) => {
           console.log(values);
           const { error } = await createPost({ input: values });
-          console.log(error);
-          if (error?.message.includes("not authenticated")) {
-            router.push("/login");
-          } else {
+          if (!error) {
             router.push("/");
           }
         }}
