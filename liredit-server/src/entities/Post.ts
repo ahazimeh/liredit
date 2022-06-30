@@ -39,10 +39,16 @@ export class Post extends BaseEntity {
   creator: User;
 
   @Field(() => String)
-  @CreateDateColumn({ type: "date" })
+  @CreateDateColumn({
+    /*type: "date"*/
+    // adding it will convert it to a date rather than a number
+  })
   createdAt?: Date; /*= new Date();*/
 
   @Field(() => String)
-  @UpdateDateColumn({ type: "date" /*, onUpdate: () => new Date() */ })
+  @UpdateDateColumn({
+    /*type: "date"*/
+    /*, onUpdate: () => new Date() */
+  })
   updatedAt?: Date; /*= new Date();*/
 }
