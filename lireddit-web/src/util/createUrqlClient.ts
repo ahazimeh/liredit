@@ -1,5 +1,5 @@
 import { dedupExchange, fetchExchange, stringifyVariables } from "urql";
-import { cacheExchange, Resolver } from "@urql/exchange-graphcache";
+import { cacheExchange, Entity, Resolver } from "@urql/exchange-graphcache";
 import {
   LogoutMutation,
   MeQuery,
@@ -45,17 +45,37 @@ const cursorPagination = (cursorArgument = "cursor"): Resolver => {
     console.log("fieldArgs: ", fieldArgs);
     const fieldKey = `${fieldName}(${stringifyVariables(fieldArgs)})`;
     console.log("key we created: ", fieldKey);
-    const isItInTheCache = cache.resolve(fieldKey, entityKey);
+    const isItInTheCache = cache.resolve(
+      cache.resolve(fieldKey, entityKey) as Entity,
+      "posts"
+    );
     console.log("isItInTheCache: ", isItInTheCache);
     info.partial = !isItInTheCache;
+    let hasMore = true;
     const results: string[] = [];
+
+    // fieldInfos.forEach((fi) => {
+    //   const data = cache.resolve(entityKey, fi.fieldKey) as string[];
+    //   console.log(data);
+    //   results.push(...data);
+    // });
+
     fieldInfos.forEach((fi) => {
-      const data = cache.resolve(entityKey, fi.fieldKey) as string[];
-      console.log(data);
+      const key = cache.resolve(entityKey, fi.fieldKey) as string;
+      const data = cache.resolve(key as Entity, "posts") as string[];
+      const _hasMore = cache.resolve(key as Entity, "hasMore");
+      if (!_hasMore) {
+        hasMore = _hasMore as boolean;
+      }
+      console.log("data: ", hasMore, data);
       results.push(...data);
     });
 
-    return results;
+    return {
+      __typename: "PaginatedPosts",
+      hasMore,
+      posts: results,
+    };
 
     // const visited = new Set();
     // let result: NullArray<string> = [];
@@ -119,6 +139,9 @@ export const createUrlqClient = (ssrExchange: any) => ({
   exchanges: [
     dedupExchange,
     cacheExchange({
+      keys: {
+        PaginatedPosts: () => null,
+      },
       resolvers: {
         Query: {
           posts: cursorPagination(),
