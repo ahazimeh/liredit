@@ -29,7 +29,8 @@ export class User extends BaseEntity {
   @Column({ type: "text" }) //removing this means it is just a field in the class and not a column
   password!: string;
 
-  @OneToMany(() => Post, (post) => post.creator)
+  @Field((type) => [Post])
+  @OneToMany(() => Post, (post) => post.creator, { lazy: true })
   posts: Post[];
 
   @Field(() => String)
