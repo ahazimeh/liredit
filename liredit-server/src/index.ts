@@ -24,6 +24,7 @@ import { MyContext } from "./types";
 import { DataSource } from "typeorm";
 import { Post } from "./entities/Post";
 import { User } from "./entities/User";
+import path from "path";
 declare module "express-session" {
   export interface SessionData {
     userId: number;
@@ -42,6 +43,7 @@ const main = async () => {
     entities: [Post, User],
     synchronize: true,
     logging: true,
+    migrations: [path.join(__dirname, "./migrations/*")],
   });
 
   // to initialize initial connection with the database, register all entities
@@ -49,6 +51,7 @@ const main = async () => {
   // once in your application bootstrap
   AppDataSource.initialize()
     .then(() => {
+      AppDataSource.runMigrations();
       // here you can start to work with your database
     })
     .catch((error) => console.log(error));

@@ -73,3 +73,7 @@ app.use(
 
   postgress:
   CREATE DATABASE lirredit2 WITH OWNER lireddit2;
+
+  npx typeorm migration:create ./src/migrations/FakePosts
+
+  for mock data: https://www.mockaroo.com/
