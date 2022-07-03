@@ -34,22 +34,22 @@ const errorExchange: Exchange =
 const cursorPagination = (cursorArgument = "cursor"): Resolver => {
   return (_parent, fieldArgs, cache, info) => {
     const { parentKey: entityKey, fieldName } = info;
-    console.log(entityKey, fieldName);
+    // console.log(entityKey, fieldName);
     const allFields = cache.inspectFields(entityKey);
-    console.log("allFields", allFields);
+    // console.log("allFields", allFields);
     const fieldInfos = allFields.filter((info) => info.fieldName === fieldName);
     const size = fieldInfos.length;
     if (size === 0) {
       return undefined;
     }
-    console.log("fieldArgs: ", fieldArgs);
+    // console.log("fieldArgs: ", fieldArgs);
     const fieldKey = `${fieldName}(${stringifyVariables(fieldArgs)})`;
-    console.log("key we created: ", fieldKey);
+    // console.log("key we created: ", fieldKey);
     const isItInTheCache = cache.resolve(
       cache.resolve(fieldKey, entityKey) as Entity,
       "posts"
     );
-    console.log("isItInTheCache: ", isItInTheCache);
+    // console.log("isItInTheCache: ", isItInTheCache);
     info.partial = !isItInTheCache;
     let hasMore = true;
     const results: string[] = [];
@@ -67,7 +67,7 @@ const cursorPagination = (cursorArgument = "cursor"): Resolver => {
       if (!_hasMore) {
         hasMore = _hasMore as boolean;
       }
-      console.log("data: ", hasMore, data);
+      // console.log("data: ", hasMore, data);
       results.push(...data);
     });
 
@@ -149,6 +149,23 @@ export const createUrlqClient = (ssrExchange: any) => ({
       },
       updates: {
         Mutation: {
+          createPost: (_result, args, cache, info) => {
+            // // console.log("start");
+            // // console.log(cache.inspectFields("Query"));
+            // cache.invalidate("Query", "posts", {
+            //   limit: 10,
+            // });
+            // // console.log("end");
+            // // console.log(cache.inspectFields("Query"));
+
+            const allFields = cache.inspectFields("Query");
+            const fieldInfos = allFields.filter(
+              (info) => info.fieldName === "posts"
+            );
+            fieldInfos.forEach((fi) => {
+              cache.invalidate("Query", "posts", fi.arguments);
+            });
+          },
           logout: (_result, args, cache, info) => {
             // cache.invalidate();
             betterUpdateQuery<LogoutMutation, MeQuery>(
