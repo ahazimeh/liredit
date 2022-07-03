@@ -129,13 +129,13 @@ export class UserResolver {
     );
     return true;
   }
-  @Query(() => [User], { nullable: true })
+  @Query(() => User, { nullable: true })
   me(@Ctx() { req }: MyContext) {
     if (!req.session.userId) {
       return null;
     }
     // return User.findOneBy({ id: req.session.userId });
-    return User.find({});
+    return User.findOneBy({ id: req.session.userId });
   }
   // ...
   @Mutation(() => UserResponse)

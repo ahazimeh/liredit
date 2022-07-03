@@ -4,7 +4,6 @@ import {
   Ctx,
   Field,
   FieldResolver,
-  Info,
   InputType,
   Int,
   Mutation,
@@ -40,7 +39,38 @@ export class PostResolver {
   textSnippet(@Root() root: Post) {
     return root.text.slice(0, 50);
   }
-  // ...
+
+  @Mutation(() => Boolean)
+  @UseMiddleware(isAuth)
+  async vote(
+    @Arg("postId", () => Int) postId: number,
+    @Arg("value", () => Int) value: number,
+    @Ctx() { req, DataSource }: MyContext
+  ) {
+    const isUpvote = value !== -1;
+    const realValue = isUpvote ? 1 : -1;
+    const { userId } = req.session;
+    // await Updoot.insert({
+    //   userId,
+    //   postId,
+    //   value: realValue,
+    // });
+    await DataSource.query(
+      `
+      START TRANSACTION;
+      insert into updoot("userId","postId", value)
+      values(${userId},${postId},${realValue});
+    update post
+    set points = points + ${realValue}
+    where id = ${postId};
+    COMMIT;
+    `
+    ).catch(async () => {
+      await DataSource.query(`ROLLBACK`);
+    });
+    return true;
+  }
+
   @Query(() => PaginatedPosts)
   async posts(
     @Arg("limit", () => Int) limit: number,

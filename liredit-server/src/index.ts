@@ -25,6 +25,7 @@ import { DataSource } from "typeorm";
 import { Post } from "./entities/Post";
 import { User } from "./entities/User";
 import path from "path";
+import { Updoot } from "./entities/Updoot";
 declare module "express-session" {
   export interface SessionData {
     userId: number;
@@ -40,7 +41,7 @@ const main = async () => {
     username: "lireddit2", ///
     password: "admin", ///
     database: "lirredit2", //
-    entities: [Post, User],
+    entities: [Post, User, Updoot],
     synchronize: true,
     logging: true,
     migrations: [path.join(__dirname, "./migrations/*")],
