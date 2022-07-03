@@ -4,6 +4,7 @@ import {
   Ctx,
   Field,
   FieldResolver,
+  Info,
   InputType,
   Int,
   Mutation,
@@ -44,23 +45,50 @@ export class PostResolver {
   async posts(
     @Arg("limit", () => Int) limit: number,
     @Arg("cursor", () => String, { nullable: true }) cursor: string | null,
+    // @Info() info: any, //this is for getting requested fields
     @Ctx() { DataSource }: MyContext
   ): Promise<PaginatedPosts> {
     const realLimit = Math.min(50, limit);
     const realLimitPlusOne = realLimit + 1;
+
+    const replacements: any[] = [realLimitPlusOne];
+    if (cursor) {
+      replacements.push(new Date(parseInt(cursor)));
+    }
+
+    const posts = await DataSource.query(
+      `
+    select p.*,
+    json_build_object(
+      'id', u.id,
+      'username', u.username,
+      'email', u.email,
+      'createdAt', u."createdAt",
+      'updatedAt', u."updatedAt"
+      ) creator
+    from post p
+    inner join public.user u on u.id = p."creatorId"
+    ${cursor ? `where p."createdAt" <$2` : ""}
+    order by p."createdAt" DESC
+    limit $1
+    `,
+      replacements
+    );
+    console.log(posts);
     // await sleep(3000);
     // return Post.find();
-    const qb = DataSource.getRepository(Post)
-      .createQueryBuilder("p")
-      // .where('"createdAt" > :cursor', { cursor })
-      .orderBy('"createdAt"', "DESC")
-      .take(realLimitPlusOne);
-    if (cursor) {
-      qb.where('"createdAt" <:cursor', {
-        cursor: new Date(parseInt(cursor)),
-      });
-    }
-    const posts = await qb.getMany();
+
+    // const qb = DataSource.getRepository(Post)
+    //   .createQueryBuilder("p")
+    //   // .where('"createdAt" > :cursor', { cursor })
+    //   .orderBy('"createdAt"', "DESC")
+    //   .take(realLimitPlusOne);
+    // if (cursor) {
+    //   qb.where('"createdAt" <:cursor', {
+    //     cursor: new Date(parseInt(cursor)),
+    //   });
+    // }
+    // const posts = await qb.getMany();
     return {
       posts: posts.slice(0, realLimit),
       hasMore: posts.length === realLimitPlusOne,

@@ -5,6 +5,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -37,8 +38,9 @@ export class Post extends BaseEntity {
 
   @Field()
   @ManyToOne(() => User, (user) => user.posts, {
-    eager: true,
+    // eager: true,
   })
+  @JoinColumn({ name: "creatorId" })
   creator: User;
 
   @Field(() => String)

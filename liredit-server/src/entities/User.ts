@@ -29,12 +29,14 @@ export class User extends BaseEntity {
   @Column({ type: "text" }) //removing this means it is just a field in the class and not a column
   password!: string;
 
-  @Field((type) => [Post])
+  @Field(() => [Post])
   @OneToMany(() => Post, (post) => post.creator, { lazy: true })
   posts: Post[];
 
   @Field(() => String)
-  @CreateDateColumn({ type: "date" })
+  @CreateDateColumn({
+    /*type: "date"*/
+  })
   createdAt?: Date; // = new Date();
 
   @Field(() => String)
