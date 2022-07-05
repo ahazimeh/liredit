@@ -15,6 +15,7 @@ import {
 } from "type-graphql";
 import { MyContext } from "../types";
 import { isAuth } from "../middleware/isAuth";
+import { Updoot } from "../entities/Updoot";
 // import { MyContext } from "../types";
 
 @InputType()
@@ -50,24 +51,48 @@ export class PostResolver {
     const isUpvote = value !== -1;
     const realValue = isUpvote ? 1 : -1;
     const { userId } = req.session;
-    // await Updoot.insert({
-    //   userId,
-    //   postId,
-    //   value: realValue,
-    // });
-    await DataSource.query(
-      `
-      START TRANSACTION;
+    const updoot = await Updoot.findOne({ where: { postId, userId } });
+    // the user has voted on the post before
+    // and they are changing their vote
+    if (updoot && updoot.value !== realValue) {
+      await DataSource.transaction(async (tm) => {
+        await tm.query(
+          `
+          update updoot set value = $1
+          where "postId" = $2 and "userId" = $3
+          `,
+          [realValue, postId, userId]
+        );
+        await tm.query(
+          `
+          update post
+          set points = points + $1
+          where id = $2;
+          `,
+          [2 * realValue, postId]
+        );
+      });
+    } else if (!updoot) {
+      // has never voted before
+      await DataSource.transaction(async (tm) => {
+        await tm.query(
+          `
+        
       insert into updoot("userId","postId", value)
-      values(${userId},${postId},${realValue});
-    update post
-    set points = points + ${realValue}
-    where id = ${postId};
-    COMMIT;
-    `
-    ).catch(async () => {
-      await DataSource.query(`ROLLBACK`);
-    });
+      values($1, $2, $3);
+        `,
+          [userId, postId, realValue]
+        );
+        await tm.query(
+          `
+        update post
+        set points = points + $1
+        where id = $2;
+        `,
+          [realValue, postId]
+        );
+      });
+    }
     return true;
   }
 
