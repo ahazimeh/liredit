@@ -15,7 +15,6 @@ const NavBar: React.FC<NavBarProps> = ({}) => {
   });
   let body = <div></div>;
   // data loading
-  console.log("qwe", data?.me);
   if (fetching) {
   }
   // user not logged in
