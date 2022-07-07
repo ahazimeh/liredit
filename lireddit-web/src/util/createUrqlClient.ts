@@ -8,6 +8,7 @@ import {
   LoginMutation,
   RegisterMutation,
   VoteMutationVariables,
+  DeletePostMutationVariables,
 } from "../generated/graphql";
 import { betterUpdateQuery } from "./betterUpdateQuery";
 
@@ -160,6 +161,17 @@ export const createUrlqClient = (ssrExchange: any, ctx: any) => {
         },
         updates: {
           Mutation: {
+            deletePost: (_result, args, cache, info) => {
+              //invalidate by default make the post null
+              //there is a way to get around that you can add a schema and tell urql about it
+              //but for this just keep in mind that there will be some posts that will have null values
+              //10:32:15
+              //I personally didn't notice this as true so maybe urql changed something but I should test it later
+              cache.invalidate({
+                __typename: "Post",
+                id: (args as DeletePostMutationVariables).id,
+              });
+            },
             vote: (_result, args, cache, info) => {
               console.log("z");
               const { postId, value } = args as VoteMutationVariables;
