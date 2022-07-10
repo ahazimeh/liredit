@@ -1,4 +1,5 @@
 import "reflect-metadata";
+// import "dotenv-safe/config";
 // import { MikroORM } from "@mikro-orm/core";
 import { COOKIE_NAME, __prod__ } from "./constants";
 // import microConfig from "./mikro-orm.config";
@@ -42,6 +43,7 @@ const main = async () => {
     port: 5432,
     username: "lireddit2", ///
     password: "admin", ///
+    // url: process.env.DATABASE_URL, // rather than setting port, username, and password
     database: "lirredit2", //
     entities: [Post, User, Updoot],
     synchronize: true,
@@ -68,11 +70,11 @@ const main = async () => {
 
   // const redis = createClient({ legacyMode: true }); //
   // redis.connect().catch(console.error); //
-  const redis = new Redis();
+  const redis = new Redis(process.env.REDIS_URL);
 
   app.use(
     cors({
-      origin: "http://localhost:3000",
+      origin: process.env.CORS_ORIGIN,
       credentials: true,
     })
   );
@@ -88,9 +90,11 @@ const main = async () => {
         httpOnly: true,
         sameSite: "lax", // to google (csrf)
         secure: __prod__, // https
+        domain: __prod__ ? ".codeponder.com" : undefined, // if you run a problem of not forwarding cookie
+        //added . before codeponder.com so it works for all domains under codeponder.com domain
       },
       saveUninitialized: false,
-      secret: "keyboard cat",
+      secret: process.env.SESSION_SECRET,
       resave: false,
     })
   );
@@ -123,7 +127,7 @@ const main = async () => {
     // },
     cors: false,
   });
-  app.listen(4000, () => {
+  app.listen(+process.env.PORT, () => {
     console.log("server started on localhost:4000");
   });
   // const post = (await orm).em.create(Post, { title: "zz" });

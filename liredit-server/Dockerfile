@@ -11,6 +11,8 @@ COPY ["package.json", "package-lock.json*", "./"]
 RUN npm install --production
 
 COPY . .
+#added
+COPY .env.production .env
 
 #added build command
 RUN npm run build

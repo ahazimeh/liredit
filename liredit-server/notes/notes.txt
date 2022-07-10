@@ -77,3 +77,10 @@ app.use(
   npx typeorm migration:create ./src/migrations/FakePosts
 
   for mock data: https://www.mockaroo.com/
+
+  npm i dotenv-safe
+  import "dotenv-safe/config"; -safe will cause an error if in .env.example there is a key that is missing from .env file
+
+  https://github.com/benawad/gen-env-types
+  gen-env-types
+  npm i -D gen-env-types //ben installed this package
