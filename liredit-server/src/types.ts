@@ -2,6 +2,9 @@
 import { Request, Response } from "express";
 import { Redis } from "ioredis";
 import { DataSource } from "typeorm";
+import DataLoader from "dataloader";
+import { User } from "./entities/User";
+import { createUserLoader } from "./utils/createUserLoader";
 export type MyContext = {
   // em: EntityManager<IDatabaseDriver<Connection>>;
   req: Request;
@@ -9,4 +12,5 @@ export type MyContext = {
   redis: Redis;
   DataSource: DataSource;
   // redis: Redis;
+  userLoader: ReturnType<typeof createUserLoader>; //DataLoader<number, User, number>;
 };
