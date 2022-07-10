@@ -1,0 +1,3 @@
+Dokku is kind of like heroku but self hosted heroku
+
+vps: digital ocean, volture is also a good option
