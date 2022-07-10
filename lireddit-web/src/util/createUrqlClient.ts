@@ -1,6 +1,11 @@
 import { dedupExchange, fetchExchange, stringifyVariables } from "urql";
 import { gql } from "@urql/core";
-import { cacheExchange, Entity, Resolver } from "@urql/exchange-graphcache";
+import {
+  Cache,
+  cacheExchange,
+  Entity,
+  Resolver,
+} from "@urql/exchange-graphcache";
 import {
   LogoutMutation,
   MeQuery,
@@ -135,6 +140,14 @@ const cursorPagination = (cursorArgument = "cursor"): Resolver => {
   };
 };
 
+function invalidAllPosts(cache: Cache) {
+  const allFields = cache.inspectFields("Query");
+  const fieldInfos = allFields.filter((info) => info.fieldName === "posts");
+  fieldInfos.forEach((fi) => {
+    cache.invalidate("Query", "posts", fi.arguments);
+  });
+}
+
 export const createUrlqClient = (ssrExchange: any, ctx: any) => {
   let cookie = "";
   if (ctx && isServer()) cookie = ctx.req.headers.cookie;
@@ -211,13 +224,7 @@ export const createUrlqClient = (ssrExchange: any, ctx: any) => {
               // // console.log("end");
               // // console.log(cache.inspectFields("Query"));
 
-              const allFields = cache.inspectFields("Query");
-              const fieldInfos = allFields.filter(
-                (info) => info.fieldName === "posts"
-              );
-              fieldInfos.forEach((fi) => {
-                cache.invalidate("Query", "posts", fi.arguments);
-              });
+              invalidAllPosts(cache);
             },
             logout: (_result, args, cache, info) => {
               // cache.invalidate();
@@ -246,6 +253,7 @@ export const createUrlqClient = (ssrExchange: any, ctx: any) => {
                   }
                 }
               );
+              invalidAllPosts(cache);
             },
             register: (_result: RegisterMutation, args, cache, info) => {
               // cache.updateQuery({query: MeDocument}, (data: MeQuery) => {

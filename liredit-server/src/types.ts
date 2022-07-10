@@ -2,8 +2,6 @@
 import { Request, Response } from "express";
 import { Redis } from "ioredis";
 import { DataSource } from "typeorm";
-import DataLoader from "dataloader";
-import { User } from "./entities/User";
 import { createUserLoader } from "./utils/createUserLoader";
 import { createUpdootLoader } from "./utils/createUpdootLoader";
 export type MyContext = {
