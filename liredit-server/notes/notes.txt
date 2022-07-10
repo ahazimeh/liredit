@@ -84,3 +84,6 @@ app.use(
   https://github.com/benawad/gen-env-types
   gen-env-types
   npm i -D gen-env-types //ben installed this package
+
+  generate migrations
+  npx typeorm migration:generate -n Initial

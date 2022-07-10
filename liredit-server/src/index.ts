@@ -46,7 +46,7 @@ const main = async () => {
     // url: process.env.DATABASE_URL, // rather than setting port, username, and password
     database: "lirredit2", //
     entities: [Post, User, Updoot],
-    synchronize: true,
+    synchronize: true, // turn this off for prod
     logging: true,
     migrations: [path.join(__dirname, "./migrations/*")],
   });
@@ -71,6 +71,8 @@ const main = async () => {
   // const redis = createClient({ legacyMode: true }); //
   // redis.connect().catch(console.error); //
   const redis = new Redis(process.env.REDIS_URL);
+  // cookies work on a proxy environment
+  app.set("proxy", 1); // 1 proxy
 
   app.use(
     cors({
@@ -127,7 +129,7 @@ const main = async () => {
     // },
     cors: false,
   });
-  app.listen(+process.env.PORT, () => {
+  app.listen(process.env.PORT, () => {
     console.log("server started on localhost:4000");
   });
   // const post = (await orm).em.create(Post, { title: "zz" });
