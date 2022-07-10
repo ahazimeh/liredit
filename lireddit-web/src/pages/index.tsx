@@ -12,6 +12,7 @@ import NextLink from "next/link";
 import { useState } from "react";
 import { EditDeletePostButtons } from "../components/EditDeletePostButtons";
 import { Layout } from "../components/Layout";
+import NavBar from "../components/NavBar";
 import { UpdootSections } from "../components/UpdootSections";
 import { useMeQuery, usePostsQuery } from "../generated/graphql";
 import { createUrlqClient } from "../util/createUrqlClient";
@@ -39,7 +40,7 @@ const Index = () => {
       ) : (
         <Stack spacing={8}>
           {data!.posts.posts.map((p) =>
-            !p ? null /** because we invalidated some posts 
+            !p ? null /** because we invalidated some posts
             but I tried to remove this and didn't notice it as true*/ : (
               <Flex key={p.id} p={5} shadow="md" borderWidth="1px">
                 <UpdootSections post={p} />

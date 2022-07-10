@@ -190,6 +190,7 @@ export const createUrlqClient = (ssrExchange: any, ctx: any) => {
                 if (data.voteStatus === value) return;
                 const newPoints =
                   data.points + (data.voteStatus ? 1 : 2) * value;
+                console.log("data", data);
                 cache.writeFragment(
                   gql`
                     fragment __ on Post {
