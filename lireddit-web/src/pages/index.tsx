@@ -27,13 +27,16 @@ import {
   EditIcon,
 } from "@chakra-ui/icons";
 import { UpdootSections } from "../components/UpdootSections";
+import { isServer } from "../util/isServer";
 
 const Index = () => {
   const [variables, setVariables] = useState({
     limit: 10,
     cursor: null as null | string,
   });
-  const [{ data: meData }] = useMeQuery();
+  const [{ data: meData }] = useMeQuery({
+    // pause: isServer(),
+  });
   const [{ data, fetching }] = usePostsQuery({
     variables,
   });

@@ -67,4 +67,5 @@ const NavBar: React.FC<NavBarProps> = ({}) => {
     </Flex>
   );
 };
-export default withUrqlClient(createUrlqClient)(NavBar);
+// export default withUrqlClient(createUrlqClient)(NavBar);
+export default NavBar;
