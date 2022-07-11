@@ -82,25 +82,25 @@ const Index = () => {
                   cursor:
                     data.posts.posts[data.posts.posts.length - 1].createdAt,
                 },
-                updateQuery: (
-                  previousValues,
-                  { fetchMoreResult }
-                ): PostsQuery => {
-                  if (!fetchMoreResult) {
-                    return previousValues as PostsQuery;
-                  }
-                  return {
-                    __typename: "Query",
-                    posts: {
-                      __typename: "PaginatedPosts",
-                      hasMore: fetchMoreResult.posts.hasMore,
-                      posts: [
-                        ...previousValues.posts.posts,
-                        ...fetchMoreResult.posts.posts,
-                      ],
-                    },
-                  };
-                },
+                // updateQuery: (
+                //   previousValues,
+                //   { fetchMoreResult }
+                // ): PostsQuery => {
+                //   if (!fetchMoreResult) {
+                //     return previousValues as PostsQuery;
+                //   }
+                //   return {
+                //     __typename: "Query",
+                //     posts: {
+                //       __typename: "PaginatedPosts",
+                //       hasMore: fetchMoreResult.posts.hasMore,
+                //       posts: [
+                //         ...previousValues.posts.posts,
+                //         ...fetchMoreResult.posts.posts,
+                //       ],
+                //     },
+                //   };
+                // },
               });
               // setVariables({
               //   limit: variables.limit,
