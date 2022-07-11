@@ -40,11 +40,13 @@ export class Post extends BaseEntity {
   @Column()
   creatorId: number;
 
-  @Field()
+  // @Field()
+  @Field({ complexity: 20 })
   @ManyToOne(() => User, (user) => user.posts, {
     // eager: true,
   })
   // @JoinColumn({ name: "creatorId" })
+  @Field({ complexity: 20 })
   creator: User;
 
   @Field(() => [Updoot])
