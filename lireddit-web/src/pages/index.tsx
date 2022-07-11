@@ -16,6 +16,7 @@ import NavBar from "../components/NavBar";
 import { UpdootSections } from "../components/UpdootSections";
 import { PostsQuery, useMeQuery, usePostsQuery } from "../generated/graphql";
 import { createUrlqClient } from "../util/createUrqlClient";
+import { withApollo } from "../util/withApollo";
 
 const Index = () => {
   // const [variables, setVariables] = useState({
@@ -120,4 +121,4 @@ const Index = () => {
 };
 
 // export default withUrqlClient(createUrlqClient, { ssr: true })(Index);
-export default Index;
+export default withApollo({ ssr: true })(Index);

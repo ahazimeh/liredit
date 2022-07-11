@@ -70,3 +70,8 @@ ChangePassword.getInitialProps = ({query}) => {
 global error handling:
 github.com/formidableLabs/urql/issues/225
 // I added it to createUrqlClient.txt
+
+
+
+for apollo ssr:
+next-apollo

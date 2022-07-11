@@ -8,6 +8,7 @@ import { toErrorMap } from "../util/toErrorMap";
 import { useRouter } from "next/router";
 import { createUrlqClient } from "../util/createUrqlClient";
 import { withUrqlClient } from "next-urql";
+import { withApollo } from "../util/withApollo";
 
 interface registerProps {}
 
@@ -62,4 +63,4 @@ const Register: React.FC<registerProps> = ({}) => {
     </Wrapper>
   );
 };
-export default Register;
+export default withApollo({ ssr: false })(Register);

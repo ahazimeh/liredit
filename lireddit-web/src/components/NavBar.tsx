@@ -20,11 +20,11 @@ const NavBar: React.FC<NavBarProps> = ({}) => {
   });
   let body = <div></div>;
   // data loading
+  console.log("h1");
   if (loading) {
   }
   // user not logged in
   else if (!data?.me) {
-    console.log("h1");
     body = (
       <>
         <NextLink href="/login">

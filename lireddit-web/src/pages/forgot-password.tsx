@@ -9,6 +9,7 @@ import Wrapper from "../components/Wrapper";
 import { useForgotPasswordMutation } from "../generated/graphql";
 import { createUrlqClient } from "../util/createUrqlClient";
 import { toErrorMap } from "../util/toErrorMap";
+import { withApollo } from "../util/withApollo";
 import login from "./login";
 
 export const ForgotPassword: React.FC<{}> = ({}) => {
@@ -52,5 +53,5 @@ export const ForgotPassword: React.FC<{}> = ({}) => {
     </Wrapper>
   );
 };
-export default ForgotPassword;
+export default withApollo({ ssr: false })(ForgotPassword);
 // export default withUrqlClient(createUrlqClient)(ForgotPassword);

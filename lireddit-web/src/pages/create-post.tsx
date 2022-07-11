@@ -8,6 +8,7 @@ import { Layout } from "../components/Layout";
 import { useCreatePostMutation } from "../generated/graphql";
 import { createUrlqClient } from "../util/createUrqlClient";
 import { useIsAuth } from "../util/useIsAuth";
+import { withApollo } from "../util/withApollo";
 
 const CreatePost: React.FC<{}> = ({}) => {
   useIsAuth();
@@ -52,4 +53,4 @@ const CreatePost: React.FC<{}> = ({}) => {
 };
 
 // export default withUrqlClient(createUrlqClient)(CreatePost);
-export default CreatePost;
+export default withApollo({ ssr: false })(CreatePost);

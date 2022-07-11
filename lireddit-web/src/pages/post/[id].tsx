@@ -7,6 +7,7 @@ import { Layout } from "../../components/Layout";
 import { usePostQuery } from "../../generated/graphql";
 import { createUrlqClient } from "../../util/createUrqlClient";
 import { useGetPostFromUrl } from "../../util/useGetPostFromUrl";
+import { withApollo } from "../../util/withApollo";
 
 const Post = ({}) => {
   const { data, loading, error } = useGetPostFromUrl();
@@ -37,4 +38,4 @@ const Post = ({}) => {
     </Layout>
   );
 };
-export default Post;
+export default withApollo({ ssr: true })(Post);
