@@ -20,7 +20,13 @@ const CreatePost: React.FC<{}> = ({}) => {
         initialValues={{ title: "", text: "" }}
         onSubmit={async (values, { setErrors }) => {
           console.log(values);
-          const { errors } = await createPost({ variables: { input: values } });
+          const { errors } = await createPost({
+            variables: { input: values },
+            update: (cache) => {
+              cache.evict({ fieldName: "posts" });
+              // cache.evict({ fieldName: "posts:{}" }); // also works
+            },
+          });
           if (!errors) {
             router.push("/");
           }

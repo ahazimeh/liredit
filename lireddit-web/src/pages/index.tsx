@@ -7,15 +7,11 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/react";
-import { withUrqlClient } from "next-urql";
 import NextLink from "next/link";
-import { useState } from "react";
 import { EditDeletePostButtons } from "../components/EditDeletePostButtons";
 import { Layout } from "../components/Layout";
-import NavBar from "../components/NavBar";
 import { UpdootSections } from "../components/UpdootSections";
-import { PostsQuery, useMeQuery, usePostsQuery } from "../generated/graphql";
-import { createUrlqClient } from "../util/createUrqlClient";
+import { usePostsQuery } from "../generated/graphql";
 import { withApollo } from "../util/withApollo";
 
 const Index = () => {

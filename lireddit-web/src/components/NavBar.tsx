@@ -16,11 +16,11 @@ const NavBar: React.FC<NavBarProps> = ({}) => {
   const apolloClient = useApolloClient();
   const { data, loading } = useMeQuery({
     // pause: isServer(),
-    // skip: isServer()
+    // skip: isServer(),
   });
   let body = <div></div>;
   // data loading
-  console.log("h1");
+  console.log("h1", data);
   if (loading) {
   }
   // user not logged in
