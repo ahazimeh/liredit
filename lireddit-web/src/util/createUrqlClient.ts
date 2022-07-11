@@ -152,7 +152,7 @@ export const createUrlqClient = (ssrExchange: any, ctx: any) => {
   let cookie = "";
   if (ctx && isServer()) cookie = ctx.req.headers.cookie;
   return {
-    url: "http://localhost:4000/graphql",
+    url: process.env.NEXT_PUBLIC_API_URL as string,
     fetchOptions: {
       credentials: "include" as RequestCredentials | undefined,
       headers: cookie
@@ -200,10 +200,11 @@ export const createUrlqClient = (ssrExchange: any, ctx: any) => {
               );
               // NOTE: ben had to add writeFragment for upvoting and downvoting cache to work
               if (data) {
-                if (data.voteStatus === value) return;
+                if (data.voteStatus === value) {
+                  return;
+                }
                 const newPoints =
-                  data.points + (data.voteStatus ? 1 : 2) * value;
-                console.log("data", data);
+                  (data.points as number) + (!data.voteStatus ? 1 : 2) * value;
                 cache.writeFragment(
                   gql`
                     fragment __ on Post {
@@ -211,7 +212,7 @@ export const createUrlqClient = (ssrExchange: any, ctx: any) => {
                       voteStatus
                     }
                   `,
-                  { id: postId, points: newPoints, voteStatus: value }
+                  { id: postId, points: newPoints, voteStatus: value } as any
                 );
               }
             },

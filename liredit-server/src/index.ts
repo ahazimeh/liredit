@@ -1,5 +1,5 @@
 import "reflect-metadata";
-// import "dotenv-safe/config";
+import "dotenv-safe/config";
 // import { MikroORM } from "@mikro-orm/core";
 import { COOKIE_NAME, __prod__ } from "./constants";
 // import microConfig from "./mikro-orm.config";
@@ -72,7 +72,7 @@ const main = async () => {
   // redis.connect().catch(console.error); //
   const redis = new Redis(process.env.REDIS_URL);
   // cookies work on a proxy environment
-  app.set("proxy", 1); // 1 proxy
+  app.set("trust proxy", 1); // 1 proxy
 
   app.use(
     cors({
