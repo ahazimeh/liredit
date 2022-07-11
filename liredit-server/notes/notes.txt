@@ -87,3 +87,7 @@ app.use(
 
   generate migrations
   npx typeorm migration:generate -n Initial
+
+
+
+  https://github.com/benawad/how-to-debug-cookies/blob/master/README.md
