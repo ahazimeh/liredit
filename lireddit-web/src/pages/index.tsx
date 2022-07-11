@@ -14,16 +14,20 @@ import { EditDeletePostButtons } from "../components/EditDeletePostButtons";
 import { Layout } from "../components/Layout";
 import NavBar from "../components/NavBar";
 import { UpdootSections } from "../components/UpdootSections";
-import { useMeQuery, usePostsQuery } from "../generated/graphql";
+import { PostsQuery, useMeQuery, usePostsQuery } from "../generated/graphql";
 import { createUrlqClient } from "../util/createUrqlClient";
 
 const Index = () => {
-  const [variables, setVariables] = useState({
-    limit: 10,
-    cursor: null as null | string,
-  });
-  const { data, error, loading } = usePostsQuery({
-    variables,
+  // const [variables, setVariables] = useState({
+  //   limit: 10,
+  //   cursor: null as null | string,
+  // });
+  const { data, error, loading, fetchMore, variables } = usePostsQuery({
+    variables: {
+      limit: 10,
+      cursor: null,
+    },
+    notifyOnNetworkStatusChange: true, // loading becomes true when we press load more
   });
   if (!loading && !data) {
     return (
@@ -72,10 +76,36 @@ const Index = () => {
         <Flex>
           <Button
             onClick={() => {
-              setVariables({
-                limit: variables.limit,
-                cursor: data.posts.posts[data.posts.posts.length - 1].createdAt,
+              fetchMore({
+                variables: {
+                  limit: variables?.limit,
+                  cursor:
+                    data.posts.posts[data.posts.posts.length - 1].createdAt,
+                },
+                updateQuery: (
+                  previousValues,
+                  { fetchMoreResult }
+                ): PostsQuery => {
+                  if (!fetchMoreResult) {
+                    return previousValues as PostsQuery;
+                  }
+                  return {
+                    __typename: "Query",
+                    posts: {
+                      __typename: "PaginatedPosts",
+                      hasMore: fetchMoreResult.posts.hasMore,
+                      posts: [
+                        ...previousValues.posts.posts,
+                        ...fetchMoreResult.posts.posts,
+                      ],
+                    },
+                  };
+                },
               });
+              // setVariables({
+              //   limit: variables.limit,
+              //   cursor: data.posts.posts[data.posts.posts.length - 1].createdAt,
+              // });
             }}
             isLoading={loading}
             m="auto"
