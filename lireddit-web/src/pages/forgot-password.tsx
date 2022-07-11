@@ -13,14 +13,14 @@ import login from "./login";
 
 export const ForgotPassword: React.FC<{}> = ({}) => {
   const [complete, setComplete] = useState(false);
-  const [, forgotPassword] = useForgotPasswordMutation();
+  const [forgotPassword] = useForgotPasswordMutation();
   return (
     <Wrapper variant="small">
       <Formik
         initialValues={{ email: "" }}
         onSubmit={async (values) => {
           //   console.log(values);
-          await forgotPassword(values);
+          await forgotPassword({ variables: values });
           setComplete(true);
         }}
       >
@@ -52,4 +52,5 @@ export const ForgotPassword: React.FC<{}> = ({}) => {
     </Wrapper>
   );
 };
-export default withUrqlClient(createUrlqClient)(ForgotPassword);
+export default ForgotPassword;
+// export default withUrqlClient(createUrlqClient)(ForgotPassword);

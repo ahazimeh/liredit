@@ -15,7 +15,7 @@ import NextLink from "next/link";
 
 export const ChangePassword: NextPage<{ token: string }> = () => {
   const router = useRouter();
-  const [, changePassword] = useChangePasswordMutation();
+  const [changePassword] = useChangePasswordMutation();
   const [tokenError, setTokenError] = useState("");
   return (
     <Wrapper variant="small">
@@ -23,9 +23,13 @@ export const ChangePassword: NextPage<{ token: string }> = () => {
         initialValues={{ newPassword: "" }}
         onSubmit={async (values, { setErrors }) => {
           const response = await changePassword({
-            newPassword: values.newPassword,
-            token:
-              typeof router.query.token === "string" ? router.query.token : "",
+            variables: {
+              newPassword: values.newPassword,
+              token:
+                typeof router.query.token === "string"
+                  ? router.query.token
+                  : "",
+            },
           });
           if (response.data?.changePassword.errors) {
             // [{field:'username', message: 'something wrong'}] -> [{username: 'something wrong'}]
@@ -73,4 +77,4 @@ export const ChangePassword: NextPage<{ token: string }> = () => {
   );
 };
 
-export default withUrqlClient(createUrlqClient, { ssr: true })(ChangePassword);
+export default ChangePassword;

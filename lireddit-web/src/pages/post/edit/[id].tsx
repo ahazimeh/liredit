@@ -15,12 +15,12 @@ import { useGetIntId } from "../../../util/useGetIntId";
 const EditPost = ({}) => {
   const router = useRouter();
   const intId = useGetIntId();
-  const [{ data, fetching }] = usePostQuery({
-    pause: intId === -1,
+  const { data, loading } = usePostQuery({
+    skip: intId === -1,
     variables: { id: intId },
   });
-  const [, updatePost] = useUpdatePostMutation(); // for the update we don't need to update the cache because we are returning a post, so urql will update the cache automatically based on the id
-  if (fetching) {
+  const [updatePost] = useUpdatePostMutation(); // for the update we don't need to update the cache because we are returning a post, so urql will update the cache automatically based on the id
+  if (loading) {
     return (
       <Layout>
         <div>loading...</div>
@@ -39,7 +39,7 @@ const EditPost = ({}) => {
       <Formik
         initialValues={{ title: data.post.title, text: data.post.text }}
         onSubmit={async (values, { setErrors }) => {
-          await updatePost({ id: intId, ...values });
+          await updatePost({ variables: { id: intId, ...values } });
           router.back();
         }}
       >
@@ -69,4 +69,4 @@ const EditPost = ({}) => {
   );
 };
 
-export default withUrqlClient(createUrlqClient)(EditPost);
+export default EditPost;
